@@ -24,9 +24,8 @@ namespace LwfCustomDifficulty.Ui
                                           bool decimals = false)
         {
             var root = CycleRow.BeginRow(parent, label + "Row");
-            CycleRow.SetWidth(
-                CycleRow.AddLabel(root.transform, label, font, TextAlignmentOptions.MidlineLeft).gameObject,
-                CycleRow.LabelWidth, flexible: 1f);
+            CycleRow.SetWidth(CycleRow.AddLabelCell(root.transform, label, font),
+                              CycleRow.LabelWidth, flexible: 1f);
 
             // Built inactive on purpose. TMP_InputField creates its caret and selection
             // highlight only in OnEnable, and only when textComponent is already assigned;

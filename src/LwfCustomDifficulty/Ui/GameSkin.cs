@@ -1,4 +1,5 @@
 using System.Reflection;
+using TMPro;
 using HarmonyLib;
 using Scene.TitleScene;
 using UnityEngine;
@@ -30,6 +31,13 @@ namespace LwfCustomDifficulty.Ui
         private const string PanelSource = "ImageBGBody_1";       // frame_corner_big, border 37
         private const string ValueSource = "ImageRepaymentCount"; // bg_shortcut,      border 4
 
+        /// <summary>The card's own row headers. Under `BodiesHeaders`, `Bodies` holds the
+        /// three value cells and `Headers` the three labels beside them, each an
+        /// `ImageRepaymentFrame`-style frame wrapping a `TMPRepaymentHeader`-style text.
+        /// "Number of Repayments" is the first of those.</summary>
+        private const string LabelFrameSource = "ImageRepaymentFrame";
+        private const string LabelTextSource = "TMPRepaymentHeader";
+
         private static readonly FieldInfo LeftButtonField =
             AccessTools.Field(typeof(DifficultySetter), "_leftButton");
 
@@ -43,6 +51,20 @@ namespace LwfCustomDifficulty.Ui
 
         /// <summary>The arrow buttons' background, for the two cells that are pressable.</summary>
         internal static Sprite Button { get; private set; }
+
+        /// <summary>The frame the card draws behind a row header.</summary>
+        internal static Sprite LabelFrame { get; private set; }
+
+        /// <summary>
+        /// A live header text, kept as a template rather than copied into constants.
+        ///
+        /// Colour, weight and alignment are read off it at the moment a label is built, so the
+        /// panel's labels are the card's labels by construction. Its own colour never appears
+        /// here as a literal: the scene's MonoBehaviour typetrees cannot be read without the
+        /// script assembly, so a literal would have been eyedropped from a screenshot and
+        /// would drift the first time the game restyled.
+        /// </summary>
+        internal static TMP_Text LabelStyle { get; private set; }
 
         /// <summary>
         /// The card's own interaction colours, read off a real button rather than guessed.
@@ -75,6 +97,9 @@ namespace LwfCustomDifficulty.Ui
 
             Panel = Find(images, PanelSource);
             ValueCell = Find(images, ValueSource);
+            LabelFrame = Find(images, LabelFrameSource);
+
+            LabelStyle = FindText(setter, LabelTextSource);
 
             // A serialized field rather than a child name: it is the card's own reference to
             // the button, and it survives the GameObject being renamed.
@@ -87,7 +112,9 @@ namespace LwfCustomDifficulty.Ui
             // The resolved values, not the intent: a name that stopped matching shows up here
             // as a null instead of quietly reverting the panel to grey.
             Plugin.Log.LogInfo($"Skin: panel={Name(Panel)} value={Name(ValueCell)} "
-                               + $"button={Name(Button)} normal={Colors.normalColor} "
+                               + $"button={Name(Button)} labelFrame={Name(LabelFrame)} "
+                               + $"labelColor={(LabelStyle != null ? LabelStyle.color.ToString() : "<null>")} "
+                               + $"normal={Colors.normalColor} "
                                + $"highlighted={Colors.highlightedColor} pressed={Colors.pressedColor} "
                                + $"resolved={Resolved}");
 
@@ -95,6 +122,32 @@ namespace LwfCustomDifficulty.Ui
             {
                 Plugin.Log.LogWarning("Skin: incomplete; unresolved cells keep their untextured fill.");
             }
+        }
+
+        private static TMP_Text FindText(DifficultySetter setter, string name)
+        {
+            foreach (var text in setter.GetComponentsInChildren<TMP_Text>(includeInactive: true))
+            {
+                if (text != null && text.name == name) return text;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Draws a label the way the card draws a row header: its colour, weight and
+        /// alignment, but not its size — these rows are 60 tall against the card's two-line
+        /// headers, and the font asset is applied separately by the panel.
+        /// </summary>
+        internal static bool ApplyLabelStyle(TMP_Text text)
+        {
+            if (text == null || LabelStyle == null) return false;
+
+            text.color = LabelStyle.color;
+            text.fontStyle = LabelStyle.fontStyle;
+            text.alignment = LabelStyle.alignment;
+            text.characterSpacing = LabelStyle.characterSpacing;
+            return true;
         }
 
         private static Sprite Find(Image[] images, string name)

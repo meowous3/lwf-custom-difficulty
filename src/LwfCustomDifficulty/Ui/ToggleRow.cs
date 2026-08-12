@@ -12,9 +12,8 @@ namespace LwfCustomDifficulty.Ui
                                           Func<bool> read, Action<bool> write)
         {
             var root = CycleRow.BeginRow(parent, label + "Row");
-            CycleRow.SetWidth(
-                CycleRow.AddLabel(root.transform, label, font, TextAlignmentOptions.MidlineLeft).gameObject,
-                CycleRow.LabelWidth, flexible: 1f);
+            CycleRow.SetWidth(CycleRow.AddLabelCell(root.transform, label, font),
+                              CycleRow.LabelWidth, flexible: 1f);
 
             var buttonGo = new GameObject("Toggle", typeof(RectTransform), typeof(Image), typeof(Button));
             buttonGo.transform.SetParent(root.transform, worldPositionStays: false);

@@ -92,8 +92,7 @@ namespace LwfCustomDifficulty.Ui
                                           Func<string> read, Action advance)
         {
             var root = BeginRow(parent, label + "Row");
-            SetWidth(AddLabel(root.transform, label, font, TextAlignmentOptions.MidlineLeft).gameObject,
-                     LabelWidth, flexible: 1f);
+            SetWidth(AddLabelCell(root.transform, label, font), LabelWidth, flexible: 1f);
 
             var buttonGo = new GameObject("Next", typeof(RectTransform), typeof(Image), typeof(Button));
             buttonGo.transform.SetParent(root.transform, worldPositionStays: false);
@@ -158,6 +157,49 @@ namespace LwfCustomDifficulty.Ui
             if (element == null) element = go.AddComponent<LayoutElement>();
             element.preferredWidth = preferred;
             element.flexibleWidth = flexible;
+        }
+
+        /// <summary>
+        /// A row's leading label, drawn the way the card draws its own row headers: the
+        /// header frame behind it, and that header's colour, weight and alignment on the text.
+        ///
+        /// The frame is a cell of its own rather than styling on the text, because that is the
+        /// card's structure — `Headers/ImageRepaymentFrame` wrapping `TMPRepaymentHeader`,
+        /// mirroring `Bodies/ImageRepaymentCount` wrapping `TMPRepaymentCount`. Matching it
+        /// puts this panel's two columns on the same footing as the card's.
+        ///
+        /// Falls back to a bare transparent cell if the frame did not resolve, which leaves
+        /// the arrangement the panel had before it borrowed any art.
+        /// </summary>
+        internal static GameObject AddLabelCell(Transform parent, string label, TMP_FontAsset font)
+        {
+            var cellGo = new GameObject(label + "Label", typeof(RectTransform), typeof(Image));
+            cellGo.transform.SetParent(parent, worldPositionStays: false);
+
+            var frame = cellGo.GetComponent<Image>();
+            if (!GameSkin.Apply(frame, GameSkin.LabelFrame))
+            {
+                // Transparent rather than tinted: an unresolved frame should read as absent,
+                // not as a second slab competing with the value cell beside it.
+                frame.color = new Color(0f, 0f, 0f, 0f);
+            }
+
+            var text = AddLabel(cellGo.transform, label, font, TextAlignmentOptions.Center,
+                                CellPadX, CellPadY);
+
+            if (!GameSkin.ApplyLabelStyle(text))
+            {
+                text.alignment = TextAlignmentOptions.MidlineLeft;
+            }
+
+            // The card's headers wrap to two lines; these are one line in a 260 column, so the
+            // longest of them shrinks to fit rather than overrunning the frame. That is the
+            // card's own answer for its readouts, which autosize between 16 and 36.
+            text.enableAutoSizing = true;
+            text.fontSizeMax = FontSize;
+            text.fontSizeMin = 16f;
+
+            return cellGo;
         }
 
         internal static TextMeshProUGUI AddLabel(Transform parent, string text, TMP_FontAsset font,
