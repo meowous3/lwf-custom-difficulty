@@ -175,10 +175,7 @@ namespace LwfCustomDifficulty.Ui
         /// included. The panel borrows the card's title face for anything it has not dressed,
         /// and the card sets its headers and its numbers in neither that face nor each other's.
         ///
-        /// Alignment comes from the template rather than being chosen here. Faces differ in
-        /// their vertical metrics, so a nominally centred string sits at a different height
-        /// depending on which one is set; taking the card's own alignment alongside its face
-        /// is what makes a cell here line up with the same cell there.
+        /// Alignment is deliberately not among them — see <see cref="CycleRow.RowAlignment"/>.
         /// </summary>
         private static bool ApplyTextStyle(TMP_Text text, TMP_Text template, bool tint = true)
         {
@@ -188,7 +185,6 @@ namespace LwfCustomDifficulty.Ui
 
             if (tint) text.color = template.color;
             text.fontStyle = template.fontStyle;
-            text.alignment = template.alignment;
             text.characterSpacing = template.characterSpacing;
             return true;
         }

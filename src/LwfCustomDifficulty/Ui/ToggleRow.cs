@@ -30,6 +30,7 @@ namespace LwfCustomDifficulty.Ui
                                               CycleRow.CellPadX, CycleRow.CellPadY);
             valueText.gameObject.name = CycleRow.ValueTextName;
             GameSkin.ApplyValueStyle(valueText, tint: false);
+            valueText.alignment = CycleRow.RowAlignment;
 
             button.onClick.AddListener(() =>
             {

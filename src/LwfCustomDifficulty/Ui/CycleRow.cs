@@ -43,6 +43,22 @@ namespace LwfCustomDifficulty.Ui
         /// <summary>Marks a value caption, which follows the card's number face.</summary>
         internal const string ValueTextName = "ValueText";
 
+        /// <summary>
+        /// Every cell in the panel, both columns, sits its text on a shared baseline.
+        ///
+        /// <c>Center</c> does not do that. TMP's middle alignment centres the whole line box,
+        /// and that box reserves descender depth from the <em>font's</em> metrics whether or
+        /// not the string contains a descender — so "Surcharge" and "Time Limit" are centred
+        /// against the same reserved space, and two faces whose metrics differ sit at
+        /// different heights in identical cells. That is the drift between the label column
+        /// and the value column: they are set in different faces.
+        ///
+        /// Baseline pins the baseline at a fixed height and lets descenders hang below it,
+        /// which levels the two columns and keeps a label that has autosized down level with
+        /// one that has not.
+        /// </summary>
+        internal const TextAlignmentOptions RowAlignment = TextAlignmentOptions.Baseline;
+
         /// <summary>The resting colour of a value cell that has no sprite behind it.</summary>
         private static readonly Color CellColor = new Color(0f, 0f, 0f, 0.35f);
 
@@ -123,6 +139,7 @@ namespace LwfCustomDifficulty.Ui
                                      CellPadX, CellPadY);
             valueText.gameObject.name = ValueTextName;
             GameSkin.ApplyValueStyle(valueText, tint: false);
+            valueText.alignment = RowAlignment;
             valueText.enableAutoSizing = true;
             valueText.fontSizeMax = FontSize;
             valueText.fontSizeMin = 18f;
@@ -200,10 +217,8 @@ namespace LwfCustomDifficulty.Ui
             // header face, which is not the card's title face that every other text here uses.
             text.gameObject.name = HeaderTextName;
 
-            if (!GameSkin.ApplyLabelStyle(text))
-            {
-                text.alignment = TextAlignmentOptions.MidlineLeft;
-            }
+            GameSkin.ApplyLabelStyle(text);
+            text.alignment = RowAlignment;
 
             // The card's headers wrap to two lines; these are one line in a 260 column, so the
             // longest of them shrinks to fit rather than overrunning the frame. That is the
