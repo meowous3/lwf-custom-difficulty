@@ -44,20 +44,22 @@ namespace LwfCustomDifficulty.Ui
         internal const string ValueTextName = "ValueText";
 
         /// <summary>
-        /// Every cell in the panel, both columns, sits its text on a shared baseline.
+        /// Every cell in the panel, both columns, centres on its midline — the midpoint
+        /// between baseline and cap height.
         ///
-        /// <c>Center</c> does not do that. TMP's middle alignment centres the whole line box,
-        /// and that box reserves descender depth from the <em>font's</em> metrics whether or
-        /// not the string contains a descender — so "Surcharge" and "Time Limit" are centred
-        /// against the same reserved space, and two faces whose metrics differ sit at
-        /// different heights in identical cells. That is the drift between the label column
-        /// and the value column: they are set in different faces.
+        /// This is the only one of the three that reads as centred. <c>Center</c> centres the
+        /// whole line box, and that box reserves ascender and descender depth from the
+        /// <em>font's</em> metrics whether or not the string contains either — so two faces
+        /// whose metrics differ sit at different heights in identical cells, which is the
+        /// drift between the label column and the value column. <c>Baseline</c> removes the
+        /// dependency but puts the baseline itself at the centre, leaving the entire glyph
+        /// body above it and the text visibly high.
         ///
-        /// Baseline pins the baseline at a fixed height and lets descenders hang below it,
-        /// which levels the two columns and keeps a label that has autosized down level with
-        /// one that has not.
+        /// Midline centres what the eye reads as the text and lets descenders hang below,
+        /// so the columns are level, a `g` does not shift its row, and a label that has
+        /// autosized down stays level with one that has not.
         /// </summary>
-        internal const TextAlignmentOptions RowAlignment = TextAlignmentOptions.Baseline;
+        internal const TextAlignmentOptions RowAlignment = TextAlignmentOptions.Midline;
 
         /// <summary>The resting colour of a value cell that has no sprite behind it.</summary>
         private static readonly Color CellColor = new Color(0f, 0f, 0f, 0.35f);
