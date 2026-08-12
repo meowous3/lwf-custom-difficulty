@@ -80,11 +80,15 @@ namespace LwfCustomDifficulty.Ui
             // children's preferred width shrinks them all in proportion, and the value column
             // is sized to the text it has to hold.
             //
-            // Vertically the eight rows need 8x60 plus seven 10s of spacing, so 28 top and
-            // bottom fits 606 into 630.
+            // Vertically the eight rows need 8x60 plus seven 10s of spacing = 550, and 28 a
+            // side leaves 606 of the panel's 630. MiddleCenter, not UpperCenter, because the
+            // remaining 24 has to go somewhere: anchored at the top it all fell to the bottom
+            // and the list sat 24 high in a 630 panel, a gap wide enough to read as a mistake.
+            // Centred, the padding is a floor and the leftover splits evenly, so the list stays
+            // centred whatever the row count.
             layout.padding = new RectOffset(29, 29, 28, 28);
             layout.spacing = 10f;
-            layout.childAlignment = TextAnchor.UpperCenter;
+            layout.childAlignment = TextAnchor.MiddleCenter;
             layout.childControlWidth = true;
             layout.childControlHeight = true;
             layout.childForceExpandWidth = true;
@@ -128,9 +132,11 @@ namespace LwfCustomDifficulty.Ui
 
             foreach (var text in _root.GetComponentsInChildren<TMP_Text>(includeInactive: true))
             {
-                // Row labels follow the card's header face, which is a different asset from
-                // the title face this method carries; GameSkin has already set it on them.
+                // The card uses three faces, not one: a title, a row header and a number.
+                // This method carries the title, which is right only for anything GameSkin
+                // has not already dressed.
                 if (text.name == CycleRow.HeaderTextName && GameSkin.LabelStyle != null) continue;
+                if (text.name == CycleRow.ValueTextName && GameSkin.ValueStyle != null) continue;
 
                 text.font = font;
             }

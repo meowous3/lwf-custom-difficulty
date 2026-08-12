@@ -38,6 +38,10 @@ namespace LwfCustomDifficulty.Ui
         private const string LabelFrameSource = "ImageRepaymentFrame";
         private const string LabelTextSource = "TMPRepaymentHeader";
 
+        /// <summary>The text inside `Bodies/ImageRepaymentCount` — the card's own value
+        /// readout, set in a different face and colour from its headers.</summary>
+        private const string ValueTextSource = "TMPRepaymentCount";
+
         private static readonly FieldInfo LeftButtonField =
             AccessTools.Field(typeof(DifficultySetter), "_leftButton");
 
@@ -65,6 +69,11 @@ namespace LwfCustomDifficulty.Ui
         /// would drift the first time the game restyled.
         /// </summary>
         internal static TMP_Text LabelStyle { get; private set; }
+
+        /// <summary>A live value readout, kept as a template for the same reason as
+        /// <see cref="LabelStyle"/>. The card sets its numbers apart from its headers, and
+        /// this panel's two columns are the same two jobs.</summary>
+        internal static TMP_Text ValueStyle { get; private set; }
 
         /// <summary>
         /// The card's own interaction colours, read off a real button rather than guessed.
@@ -100,6 +109,7 @@ namespace LwfCustomDifficulty.Ui
             LabelFrame = Find(images, LabelFrameSource);
 
             LabelStyle = FindText(setter, LabelTextSource);
+            ValueStyle = FindText(setter, ValueTextSource);
 
             // A serialized field rather than a child name: it is the card's own reference to
             // the button, and it survives the GameObject being renamed.
@@ -113,7 +123,7 @@ namespace LwfCustomDifficulty.Ui
             // as a null instead of quietly reverting the panel to grey.
             Plugin.Log.LogInfo($"Skin: panel={Name(Panel)} value={Name(ValueCell)} "
                                + $"button={Name(Button)} labelFrame={Name(LabelFrame)} "
-                               + $"labelFont={(LabelStyle != null && LabelStyle.font != null ? LabelStyle.font.name : "<null>")} labelColor={(LabelStyle != null ? LabelStyle.color.ToString() : "<null>")} "
+                               + $"labelFont={Face(LabelStyle)} labelColor={Tint(LabelStyle)} valueFont={Face(ValueStyle)} valueColor={Tint(ValueStyle)} "
                                + $"normal={Colors.normalColor} "
                                + $"highlighted={Colors.highlightedColor} pressed={Colors.pressedColor} "
                                + $"resolved={Resolved}");
@@ -141,16 +151,33 @@ namespace LwfCustomDifficulty.Ui
         /// </summary>
         internal static bool ApplyLabelStyle(TMP_Text text)
         {
-            if (text == null || LabelStyle == null) return false;
+            return ApplyTextStyle(text, LabelStyle);
+        }
 
-            // Including the face itself. The card sets its headers in a different font from
-            // its title, and the title is the one the panel borrows for everything else.
-            if (LabelStyle.font != null) text.font = LabelStyle.font;
+        /// <summary>
+        /// Draws a value the way the card draws one of its numbers. Size is the caller's,
+        /// as above: these cells are 60 tall against the card's 100.
+        /// </summary>
+        internal static bool ApplyValueStyle(TMP_Text text)
+        {
+            return ApplyTextStyle(text, ValueStyle);
+        }
 
-            text.color = LabelStyle.color;
-            text.fontStyle = LabelStyle.fontStyle;
-            text.alignment = LabelStyle.alignment;
-            text.characterSpacing = LabelStyle.characterSpacing;
+        /// <summary>
+        /// Everything that makes one text look like another except its size — the face
+        /// included. The panel borrows the card's title face for anything it has not dressed,
+        /// and the card sets its headers and its numbers in neither that face nor each other's.
+        /// </summary>
+        private static bool ApplyTextStyle(TMP_Text text, TMP_Text template)
+        {
+            if (text == null || template == null) return false;
+
+            if (template.font != null) text.font = template.font;
+
+            text.color = template.color;
+            text.fontStyle = template.fontStyle;
+            text.alignment = template.alignment;
+            text.characterSpacing = template.characterSpacing;
             return true;
         }
 
@@ -162,6 +189,16 @@ namespace LwfCustomDifficulty.Ui
             }
 
             return null;
+        }
+
+        private static string Face(TMP_Text text)
+        {
+            return text != null && text.font != null ? text.font.name : "<null>";
+        }
+
+        private static string Tint(TMP_Text text)
+        {
+            return text != null ? text.color.ToString() : "<null>";
         }
 
         private static string Name(Sprite sprite)

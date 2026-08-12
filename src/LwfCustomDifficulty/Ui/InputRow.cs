@@ -58,6 +58,10 @@ namespace LwfCustomDifficulty.Ui
             // habit anyway: of the 468 texts in this scene that sit on an Image, 312 are
             // centred and 156 are left-aligned, and not one of them is right-aligned. The
             // card's own two number cells are centred, and these now read the same way.
+            textGo.name = CycleRow.ValueTextName;
+            GameSkin.ApplyValueStyle(text);
+
+            // After the style, which carries the card's own alignment for a number cell.
             text.alignment = TextAlignmentOptions.Center;
             text.fontSize = CycleRow.FontSize;
             text.enableAutoSizing = false;

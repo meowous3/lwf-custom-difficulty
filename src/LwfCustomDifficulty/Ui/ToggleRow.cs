@@ -28,6 +28,8 @@ namespace LwfCustomDifficulty.Ui
             var valueText = CycleRow.AddLabel(buttonGo.transform, Caption(read()), font,
                                               TextAlignmentOptions.Center,
                                               CycleRow.CellPadX, CycleRow.CellPadY);
+            valueText.gameObject.name = CycleRow.ValueTextName;
+            GameSkin.ApplyValueStyle(valueText);
 
             button.onClick.AddListener(() =>
             {

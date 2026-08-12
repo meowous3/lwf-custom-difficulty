@@ -40,6 +40,9 @@ namespace LwfCustomDifficulty.Ui
         /// than its title face. <see cref="CustomOptionsPanel"/>'s font pass reads it.</summary>
         internal const string HeaderTextName = "HeaderText";
 
+        /// <summary>Marks a value caption, which follows the card's number face.</summary>
+        internal const string ValueTextName = "ValueText";
+
         /// <summary>The resting colour of a value cell that has no sprite behind it.</summary>
         private static readonly Color CellColor = new Color(0f, 0f, 0f, 0.35f);
 
@@ -118,6 +121,8 @@ namespace LwfCustomDifficulty.Ui
             // same problem: all three of its readouts autosize, at 16 to 36.
             var valueText = AddLabel(buttonGo.transform, read(), font, TextAlignmentOptions.Center,
                                      CellPadX, CellPadY);
+            valueText.gameObject.name = ValueTextName;
+            GameSkin.ApplyValueStyle(valueText);
             valueText.enableAutoSizing = true;
             valueText.fontSizeMax = FontSize;
             valueText.fontSizeMin = 18f;
