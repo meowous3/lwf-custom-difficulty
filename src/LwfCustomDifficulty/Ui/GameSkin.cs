@@ -113,7 +113,7 @@ namespace LwfCustomDifficulty.Ui
             // as a null instead of quietly reverting the panel to grey.
             Plugin.Log.LogInfo($"Skin: panel={Name(Panel)} value={Name(ValueCell)} "
                                + $"button={Name(Button)} labelFrame={Name(LabelFrame)} "
-                               + $"labelColor={(LabelStyle != null ? LabelStyle.color.ToString() : "<null>")} "
+                               + $"labelFont={(LabelStyle != null && LabelStyle.font != null ? LabelStyle.font.name : "<null>")} labelColor={(LabelStyle != null ? LabelStyle.color.ToString() : "<null>")} "
                                + $"normal={Colors.normalColor} "
                                + $"highlighted={Colors.highlightedColor} pressed={Colors.pressedColor} "
                                + $"resolved={Resolved}");
@@ -135,13 +135,17 @@ namespace LwfCustomDifficulty.Ui
         }
 
         /// <summary>
-        /// Draws a label the way the card draws a row header: its colour, weight and
-        /// alignment, but not its size — these rows are 60 tall against the card's two-line
-        /// headers, and the font asset is applied separately by the panel.
+        /// Draws a label the way the card draws a row header: its face, colour, weight and
+        /// alignment — but not its size. These rows are 60 tall against the card's two-line
+        /// headers, so the caller sizes the text itself.
         /// </summary>
         internal static bool ApplyLabelStyle(TMP_Text text)
         {
             if (text == null || LabelStyle == null) return false;
+
+            // Including the face itself. The card sets its headers in a different font from
+            // its title, and the title is the one the panel borrows for everything else.
+            if (LabelStyle.font != null) text.font = LabelStyle.font;
 
             text.color = LabelStyle.color;
             text.fontStyle = LabelStyle.fontStyle;

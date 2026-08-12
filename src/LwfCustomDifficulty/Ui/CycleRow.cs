@@ -36,6 +36,10 @@ namespace LwfCustomDifficulty.Ui
         internal const float CellPadX = 10f;
         internal const float CellPadY = 5f;
 
+        /// <summary>Marks the one text per row that follows the card's header face rather
+        /// than its title face. <see cref="CustomOptionsPanel"/>'s font pass reads it.</summary>
+        internal const string HeaderTextName = "HeaderText";
+
         /// <summary>The resting colour of a value cell that has no sprite behind it.</summary>
         private static readonly Color CellColor = new Color(0f, 0f, 0f, 0.35f);
 
@@ -186,6 +190,10 @@ namespace LwfCustomDifficulty.Ui
 
             var text = AddLabel(cellGo.transform, label, font, TextAlignmentOptions.Center,
                                 CellPadX, CellPadY);
+
+            // Named so the panel's font pass can tell it apart. A header is set in the card's
+            // header face, which is not the card's title face that every other text here uses.
+            text.gameObject.name = HeaderTextName;
 
             if (!GameSkin.ApplyLabelStyle(text))
             {

@@ -128,6 +128,10 @@ namespace LwfCustomDifficulty.Ui
 
             foreach (var text in _root.GetComponentsInChildren<TMP_Text>(includeInactive: true))
             {
+                // Row labels follow the card's header face, which is a different asset from
+                // the title face this method carries; GameSkin has already set it on them.
+                if (text.name == CycleRow.HeaderTextName && GameSkin.LabelStyle != null) continue;
+
                 text.font = font;
             }
         }
