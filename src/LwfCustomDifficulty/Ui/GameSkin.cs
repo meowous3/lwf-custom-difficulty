@@ -157,24 +157,36 @@ namespace LwfCustomDifficulty.Ui
         /// <summary>
         /// Draws a value the way the card draws one of its numbers. Size is the caller's,
         /// as above: these cells are 60 tall against the card's 100.
+        ///
+        /// <paramref name="tint"/> is false for a caption on a pressable cell. The card's
+        /// numbers sit on <c>bg_shortcut</c>, which is light, so they are dark; the two
+        /// pressable rows here sit on <c>button_action</c>, which is nearly black, and the
+        /// card has no text of its own on that sprite to copy. Taking the number colour there
+        /// puts dark on dark and the caption disappears — so those keep the face and lose the
+        /// colour.
         /// </summary>
-        internal static bool ApplyValueStyle(TMP_Text text)
+        internal static bool ApplyValueStyle(TMP_Text text, bool tint = true)
         {
-            return ApplyTextStyle(text, ValueStyle);
+            return ApplyTextStyle(text, ValueStyle, tint);
         }
 
         /// <summary>
         /// Everything that makes one text look like another except its size — the face
         /// included. The panel borrows the card's title face for anything it has not dressed,
         /// and the card sets its headers and its numbers in neither that face nor each other's.
+        ///
+        /// Alignment comes from the template rather than being chosen here. Faces differ in
+        /// their vertical metrics, so a nominally centred string sits at a different height
+        /// depending on which one is set; taking the card's own alignment alongside its face
+        /// is what makes a cell here line up with the same cell there.
         /// </summary>
-        private static bool ApplyTextStyle(TMP_Text text, TMP_Text template)
+        private static bool ApplyTextStyle(TMP_Text text, TMP_Text template, bool tint = true)
         {
             if (text == null || template == null) return false;
 
             if (template.font != null) text.font = template.font;
 
-            text.color = template.color;
+            if (tint) text.color = template.color;
             text.fontStyle = template.fontStyle;
             text.alignment = template.alignment;
             text.characterSpacing = template.characterSpacing;

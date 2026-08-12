@@ -122,7 +122,7 @@ namespace LwfCustomDifficulty.Ui
             var valueText = AddLabel(buttonGo.transform, read(), font, TextAlignmentOptions.Center,
                                      CellPadX, CellPadY);
             valueText.gameObject.name = ValueTextName;
-            GameSkin.ApplyValueStyle(valueText);
+            GameSkin.ApplyValueStyle(valueText, tint: false);
             valueText.enableAutoSizing = true;
             valueText.fontSizeMax = FontSize;
             valueText.fontSizeMin = 18f;

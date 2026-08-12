@@ -29,7 +29,7 @@ namespace LwfCustomDifficulty.Ui
                                               TextAlignmentOptions.Center,
                                               CycleRow.CellPadX, CycleRow.CellPadY);
             valueText.gameObject.name = CycleRow.ValueTextName;
-            GameSkin.ApplyValueStyle(valueText);
+            GameSkin.ApplyValueStyle(valueText, tint: false);
 
             button.onClick.AddListener(() =>
             {

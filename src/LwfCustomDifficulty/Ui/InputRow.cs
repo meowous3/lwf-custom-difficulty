@@ -59,10 +59,14 @@ namespace LwfCustomDifficulty.Ui
             // centred and 156 are left-aligned, and not one of them is right-aligned. The
             // card's own two number cells are centred, and these now read the same way.
             textGo.name = CycleRow.ValueTextName;
-            GameSkin.ApplyValueStyle(text);
 
-            // After the style, which carries the card's own alignment for a number cell.
-            text.alignment = TextAlignmentOptions.Center;
+            // Alignment included: the number face has its own vertical metrics, and forcing
+            // Center on top of it dropped the digits below the label beside them.
+            if (!GameSkin.ApplyValueStyle(text))
+            {
+                text.alignment = TextAlignmentOptions.Center;
+            }
+
             text.fontSize = CycleRow.FontSize;
             text.enableAutoSizing = false;
 
