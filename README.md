@@ -8,17 +8,17 @@ Built against demo build `0.20.1` (Steam app 4638750).
 
 ## Install
 
-1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchFactory.exe`. Use the Windows build on Linux too.
+1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchFactory.exe`.
 
-2. Linux only — Steam launch options:
+       Linux only — Steam launch options:
 
-   ```
-   WINEDLLOVERRIDES="winhttp=n,b" %command%
-   ```
+         ```
+         WINEDLLOVERRIDES="winhttp=n,b" %command%
+         ```
 
-3. Run the game once.
+2. Run the game once.
 
-4. Put `LwfCustomDifficulty.dll` in `BepInEx/plugins/`.
+3. Put `LwfCustomDifficulty.dll` in `BepInEx/plugins/`.
 
 Custom is the leftmost card in the difficulty carousel.
 
