@@ -6,6 +6,8 @@ Custom runs pay `x0.00` and write nothing to your save. Nothing done in one is e
 
 Built against `0.21.0` (Steam app 3971650). Also runs on the demo.
 
+![The difficulty selection screen, with the Custom options panel beside the Custom card](docs/difficulty-screen.png)
+
 ## Install
 
 1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchsFactory.exe`.
