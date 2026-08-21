@@ -134,14 +134,29 @@ namespace LwfCustomDifficulty.Patches
         }
     }
 
-    /// <summary>Raises the scope. The constructor is the first thing that knows the run's
-    /// difficulty; <see cref="RulePatches"/> already writes the rules from here.</summary>
+    /// <summary>
+    /// Sets the scope to match the run being constructed. The constructor is the first thing
+    /// that knows the difficulty; <see cref="RulePatches"/> already writes the rules from here.
+    ///
+    /// A vanilla run lowers it rather than merely not raising it. The three lowering points
+    /// are each expected to fire, but the failure they cannot cover is a scope left standing
+    /// into someone's real run — which would suppress that run's progress silently, the worst
+    /// outcome available here. Starting any vanilla run now guarantees saving is on,
+    /// independently of whether the previous run ended tidily.
+    /// </summary>
     [HarmonyPatch(typeof(WinCondition), MethodType.Constructor, new[] { typeof(Difficulty) })]
     internal static class WinConditionScopeBeginPatch
     {
         private static void Postfix(Difficulty difficulty)
         {
-            if (CustomDifficulty.IsCustom(difficulty)) CustomRunScope.Begin();
+            if (CustomDifficulty.IsCustom(difficulty))
+            {
+                CustomRunScope.Begin();
+            }
+            else
+            {
+                CustomRunScope.End();
+            }
         }
     }
 
