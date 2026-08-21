@@ -2,7 +2,7 @@
 
 BepInEx plugin for **Lazy Witch's Factory**. Adds a Custom difficulty whose time limit, repayment count, repayment curve and taxes are set from the difficulty selection screen.
 
-Custom runs pay `x0.00` and write nothing to your save. Nothing done in one is earned — the run's own settings decide what winning takes, and one repayment of one coin is a legal configuration — so no progress of any kind is recorded: no cleared difficulty, no unlock notice, no patron clears, no biome, no adventure progress, and no entry in run history.
+Custom runs pay `x0.00` and record nothing — no unlocks, no clears, no run history. You can set them to be trivially winnable, so they never touch your save.
 
 Built against `0.21.0` (Steam app 3971650). Also runs on the demo.
 
