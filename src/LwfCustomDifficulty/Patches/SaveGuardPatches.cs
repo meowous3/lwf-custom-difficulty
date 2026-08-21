@@ -103,15 +103,20 @@ namespace LwfCustomDifficulty.Patches
     /// through it.
     ///
     /// Deliberately NOT mirrored with a prefix on the recorder's own <c>OnWin</c>, unlike
-    /// <see cref="DifficultyUnlockManagerOnWinGuard"/>. Every write in that method is
-    /// difficulty-keyed; this one's are not. Its other reachable write is
-    /// <c>AddClearedInitialBiome(initialPointData.biomeType)</c>, which carries no
-    /// difficulty, records something the player genuinely did, and is exactly what a
-    /// vanilla New Customer win would write. Skipping the method would suppress it and
-    /// cost the player real progress. The remaining two writes are already unreachable:
+    /// <see cref="DifficultyUnlockManagerOnWinGuard"/> — but only because
+    /// <see cref="CustomRunScope"/> now covers that method's other writes wholesale, not
+    /// because they are wanted.
+    ///
+    /// An earlier version of this comment argued that its
+    /// <c>AddClearedInitialBiome(initialPointData.biomeType)</c> write carried no difficulty,
+    /// recorded something the player genuinely did, and had to be preserved. That reasoning
+    /// was wrong, and it was wrong in a way worth keeping written down: nothing done in a
+    /// Custom run is earned, because the run's own settings decide what winning takes. One
+    /// repayment of one coin is a legal configuration, so a Custom biome clear is a click,
+    /// not an achievement. The remaining two writes are unreachable regardless —
     /// <c>AddClearedInfernoWithAllTaxes</c> is gated on <c>DifficultyRules.IsInferno</c>,
-    /// which Custom's negative id fails, and <c>AddClearedReckoningDifficulty</c> needs a
-    /// game mode this build excludes.
+    /// which Custom's negative id fails, and <c>AddClearedReckoningDifficulty</c> is keyed
+    /// to a game mode a Custom run is never in.
     /// </summary>
     [HarmonyPatch(typeof(GameData), nameof(GameData.AddClearedAdvPatronDifficulty))]
     internal static class GameDataAddClearedAdvPatronDifficultyGuard
