@@ -8,7 +8,7 @@ Built against `0.21.0` (Steam app 3971650). Also runs on the demo.
 
 ## Install
 
-1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchsFactory.exe`.
+1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchsFactory.exe`.[^linux]
 
 2. Run the game once.
 
@@ -66,3 +66,5 @@ dotnet test tests/LwfCustomDifficulty.Tests
 ## Licence
 
 MIT. Not affiliated with the developers of Lazy Witch's Factory.
+
+[^linux]: On Linux, add `WINEDLLOVERRIDES="winhttp=n,b" %command%` to the game's Steam launch options. Without it BepInEx never loads and nothing happens, with no error. The win_x64 build is the right one under Proton.
