@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace LwfCustomDifficulty
 {
-    [BepInPlugin(PluginGuid, "LWF Custom Difficulty", "0.1.0")]
+    [BepInPlugin(PluginGuid, "LWF Custom Difficulty", "0.2.0")]
     public class Plugin : BaseUnityPlugin
     {
         public const string PluginGuid = "dev.meow.lwfcustomdifficulty";
