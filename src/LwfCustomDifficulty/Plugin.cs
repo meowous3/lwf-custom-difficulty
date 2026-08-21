@@ -4,6 +4,7 @@ using BepInEx;
 using BepInEx.Logging;
 using GameState;
 using HarmonyLib;
+using LwfCustomDifficulty.Patches;
 using LwfCustomDifficulty.Ui;
 using Scene.TitleScene;
 using TMPro;
@@ -22,7 +23,12 @@ namespace LwfCustomDifficulty
         {
             Log = Logger;
             PluginConfig.Bind(Config);
-            new Harmony(PluginGuid).PatchAll();
+            var harmony = new Harmony(PluginGuid);
+            harmony.PatchAll();
+
+            // Computed rather than declared, so it cannot go in an attribute: every save
+            // writer on the accessor is guarded for the length of a Custom run.
+            CustomRunScope.Install(harmony);
 
             // BuildOrder filters through IsDifficultyIncluded, so it runs after PatchAll.
             var order = CustomDifficulty.BuildOrder();
