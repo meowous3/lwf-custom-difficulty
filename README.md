@@ -4,11 +4,11 @@ BepInEx plugin for **Lazy Witch's Factory**. Adds a Custom difficulty whose time
 
 Custom runs pay `x0.00` and write nothing to your save, no cleared difficulty, no unlock notice, no patron clears.
 
-Built against demo build `0.20.1` (Steam app 4638750).
+Built against `0.21.0` (Steam app 3971650). Also runs on the demo.
 
 ## Install
 
-1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchFactory.exe`.
+1. Install [BepInEx 5.4.23.5 win_x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5) into the game folder, next to `LazyWitchsFactory.exe`.
 
 2. Run the game once.
 
