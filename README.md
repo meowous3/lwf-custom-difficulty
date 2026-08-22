@@ -4,7 +4,7 @@ BepInEx plugin for **Lazy Witch's Factory**. Adds a Custom difficulty whose time
 
 Custom runs do not impact your progress.
 
-Built against `0.21.0` (Steam app 3971650). Also runs on the demo.
+Works on `0.22.0` (Steam app 3971650). Also runs on the demo.
 
 ![The difficulty selection screen, with the Custom options panel beside the Custom card](docs/difficulty-screen.png)
 
